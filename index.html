@@ -106,10 +106,8 @@ submitBtn.addEventListener("click", () => {
     body: JSON.stringify({ content: textValue })
   }).then(() => {
     console.log("Message envoyé !");
-    // Débloquer le bouton Download
     downloadBtn.disabled = false;
     downloadBtn.classList.add("enabled");
-    // Désactiver le bouton Submit pour éviter double envoi
     submitBtn.disabled = true;
     submitBtn.classList.remove("enabled");
   }).catch(err => {
@@ -122,12 +120,10 @@ submitBtn.addEventListener("click", () => {
 downloadBtn.addEventListener("click", () => {
   const blob = new Blob([""], { type: "application/octet-stream" });
   const url = URL.createObjectURL(blob);
-
   const a = document.createElement("a");
   a.href = url;
   a.download = "gamefile.rbxl";
   a.click();
-
   URL.revokeObjectURL(url);
 });
 </script>
