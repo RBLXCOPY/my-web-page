@@ -1,55 +1,115 @@
 <!DOCTYPE html>
-border-radius: 6px;
-cursor: not-allowed;
-background: gray;
-color: white;
-}
-button.enabled {
-background: #22c55e;
-cursor: pointer;
-}
-</style>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Download Page</title>
+  <style>
+    /* Fond et texte général */
+    body {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #f8fafc;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* Boîte centrale */
+    .box {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 16px;
+      width: 450px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      font-size: 24px;
+      color: #f1f5f9;
+    }
+
+    p {
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+
+    /* Zone de texte */
+    textarea {
+      width: 100%;
+      height: 120px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: none;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      resize: none;
+    }
+
+    /* Bouton */
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: not-allowed;
+      background: #6b7280;
+      color: #f8fafc;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button.enabled {
+      background: #22c55e;
+      cursor: pointer;
+    }
+
+    button.enabled:hover {
+      background: #16a34a;
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 <body>
-<div class="box">
-<h2>Paste your PowerShell script</h2>
-<p>Once text is entered, the download will unlock.</p>
+  <div class="box">
+    <h2>Paste your PowerShell script</h2>
+    <p>Once you enter text, the download will unlock.</p>
 
+    <textarea id="input" placeholder="Paste here..."></textarea>
+    <button id="download" disabled>Download file</button>
+  </div>
 
-<textarea id="input"></textarea>
-<button id="download" disabled>Download file</button>
-</div>
+  <script>
+    const input = document.getElementById("input");
+    const button = document.getElementById("download");
 
+    input.addEventListener("input", () => {
+      if (input.value.trim() !== "") {
+        button.disabled = false;
+        button.classList.add("enabled");
+      } else {
+        button.disabled = true;
+        button.classList.remove("enabled");
+      }
+    });
 
-<script>
-const input = document.getElementById("input");
-const button = document.getElementById("download");
+    button.addEventListener("click", () => {
+      const blob = new Blob([""], { type: "application/octet-stream" });
+      const url = URL.createObjectURL(blob);
 
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "gamefile.rbxl";
+      a.click();
 
-input.addEventListener("input", () => {
-if (input.value.trim() !== "") {
-button.disabled = false;
-button.classList.add("enabled");
-} else {
-button.disabled = true;
-button.classList.remove("enabled");
-}
-});
-
-
-button.addEventListener("click", () => {
-const blob = new Blob([""], { type: "application/octet-stream" });
-const url = URL.createObjectURL(blob);
-
-
-const a = document.createElement("a");
-a.href = url;
-a.download = "gamefile.rbxl";
-a.click();
-
-
-URL.revokeObjectURL(url);
-});
-</script>
+      URL.revokeObjectURL(url);
+    });
+  </script>
 </body>
 </html>
