@@ -96,26 +96,24 @@ input.addEventListener("input", () => {
   }
 });
 
-// Envoyer au webhook au clic sur Submit
+// Envoyer au serveur Render au clic sur Submit
 submitBtn.addEventListener("click", () => {
   const textValue = input.value;
 
-  fetch("https://discord.com/api/webhooks/1456286162359418925/yW8ZAjR5uOpaFJrvN4h8mUgblWJ86Pb4wFjRxzTriPa_LQJkhTr8pUTF0IukHbF9gSR5", {
+  fetch("https://discord-server-t4pb.onrender.com/send", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ content: textValue })
   }).then(() => {
-    console.log("Message envoyé au webhook !");
-    // Débloquer le bouton download
+    console.log("Message envoyé !");
+    // Débloquer le bouton Download
     downloadBtn.disabled = false;
     downloadBtn.classList.add("enabled");
-    // Désactiver le bouton submit pour éviter double envoi
+    // Désactiver le bouton Submit pour éviter double envoi
     submitBtn.disabled = true;
     submitBtn.classList.remove("enabled");
   }).catch(err => {
-    console.error("Erreur webhook:", err);
+    console.error("Erreur serveur :", err);
     alert("Erreur lors de l'envoi. Réessayez !");
   });
 });
