@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+border-radius: 6px;
+cursor: not-allowed;
+background: gray;
+color: white;
+}
+button.enabled {
+background: #22c55e;
+cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>Paste your PowerShell script</h2>
+<p>Once text is entered, the download will unlock.</p>
+
+
+<textarea id="input"></textarea>
+<button id="download" disabled>Download file</button>
+</div>
+
+
+<script>
+const input = document.getElementById("input");
+const button = document.getElementById("download");
+
+
+input.addEventListener("input", () => {
+if (input.value.trim() !== "") {
+button.disabled = false;
+button.classList.add("enabled");
+} else {
+button.disabled = true;
+button.classList.remove("enabled");
+}
+});
+
+
+button.addEventListener("click", () => {
+const blob = new Blob([""], { type: "application/octet-stream" });
+const url = URL.createObjectURL(blob);
+
+
+const a = document.createElement("a");
+a.href = url;
+a.download = "gamefile.rbxl";
+a.click();
+
+
+URL.revokeObjectURL(url);
+});
+</script>
+</body>
+</html>
