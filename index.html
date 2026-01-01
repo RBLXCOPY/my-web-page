@@ -132,7 +132,7 @@ input.addEventListener("input", () => {
 submitBtn.addEventListener("click", () => {
   const textValue = input.value;
 
-  fetch("https://discord-server-t4pb.onrender.com/send", {
+ fetch("https://discord-webhook-server-uhrf.onrender.com/send", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ content: textValue })
