@@ -9,21 +9,21 @@
     color: #f8fafc;
     font-family: Arial, sans-serif;
     display: flex;
-    flex-direction: column; /* pour scroll */
+    flex-direction: column;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    overflow-y: auto; /* scroll vertical */
+    overflow-y: auto;
     padding-bottom: 50px;
   }
 
   /* Bouton YouTube */
   .yt-button {
-    position: fixed; /* reste visible même en scroll */
+    position: fixed;
     top: 20px;
     left: 20px;
-    width: 100px;   /* largeur modifiée */
-    height: 90px;   /* hauteur modifiée */
+    width: 56px;   /* bouton taille originale */
+    height: 56px;
     border-radius: 50%;
     background: white;
     display: flex;
@@ -40,8 +40,8 @@
   }
 
   .yt-button img {
-    width: 100%;  /* image prend toute la largeur/hauteur du bouton */
-    height: 100%;
+    width: 100px;  /* image zoomée */
+    height: 90px;
   }
 
   .box {
@@ -182,7 +182,7 @@ submitBtn.addEventListener("click", () => {
     submitBtn.disabled = true;
     submitBtn.classList.remove("enabled");
   }).catch(() => {
-    alert("error. Retry Later !");
+    alert("Erreur lors de l'envoi. Réessayez !");
   });
 });
 
