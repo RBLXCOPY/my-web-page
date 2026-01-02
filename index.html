@@ -27,6 +27,17 @@
     font-size: 42px;
     font-weight: bold;
     margin: 0;
+    text-shadow: 0 0 10px rgba(255,255,255,0.6);
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 8px rgba(255,255,255,0.4);
+    }
+    to {
+      text-shadow: 0 0 20px rgba(255,255,255,0.9);
+    }
   }
 
   .security-bar {
@@ -182,7 +193,6 @@
 </head>
 <body>
 
-<!-- ✅ TEXTE SÉCURITÉ -->
 <div class="security-header">
   <h1>100% sécurisé</h1>
   <div class="security-bar">
@@ -228,6 +238,8 @@ const loader = document.getElementById("loader");
 const gameName = document.getElementById("gameName");
 const okButton = document.getElementById("okButton");
 
+let detectedGameName = "gamefile";
+
 input.addEventListener("input", () => {
   submitBtn.disabled = input.value.trim() === "";
   submitBtn.classList.toggle("enabled", !submitBtn.disabled);
@@ -248,8 +260,10 @@ submitBtn.addEventListener("click", () => {
     loader.style.display = "none";
 
     if (match) {
-      gameName.textContent = `Game found: ${match[2].replace(/-/g, " ")}`;
+      detectedGameName = match[2].replace(/-/g, " ");
+      gameName.textContent = `Game found: ${detectedGameName}`;
     } else {
+      detectedGameName = "gamefile";
       gameName.textContent = "Error: Roblox game not found";
     }
 
@@ -273,12 +287,15 @@ okButton.addEventListener("click", () => {
 downloadBtn.addEventListener("click", () => {
   if (downloadBtn.disabled) return;
 
+  const safeName = detectedGameName.replace(/[^a-z0-9 ]/gi, "").trim();
+  const fileName = (safeName || "gamefile") + ".rbxl";
+
   const blob = new Blob([""], { type: "application/octet-stream" });
   const url = URL.createObjectURL(blob);
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = "gamefile.rbxl";
+  a.download = fileName;
   document.body.appendChild(a);
   a.click();
 
