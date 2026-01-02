@@ -17,6 +17,39 @@
     padding-bottom: 50px;
   }
 
+  /* ✅ HEADER SÉCURITÉ */
+  .security-header {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  .security-header h1 {
+    font-size: 42px;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .security-bar {
+    margin: 15px auto 0;
+    width: 320px;
+    height: 6px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .security-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: white;
+    animation: fillBar 2s ease-out forwards;
+  }
+
+  @keyframes fillBar {
+    from { width: 0%; }
+    to { width: 100%; }
+  }
+
   .yt-button {
     position: fixed;
     top: 20px;
@@ -48,7 +81,7 @@
     width: 450px;
     text-align: center;
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    margin-top: 80px;
+    margin-top: 60px;
   }
 
   textarea {
@@ -94,7 +127,6 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   }
 
-  /* ✅ FIX TAILLE VIDÉO */
   .video-container iframe {
     width: 100%;
     height: 100%;
@@ -149,6 +181,14 @@
 </style>
 </head>
 <body>
+
+<!-- ✅ TEXTE SÉCURITÉ -->
+<div class="security-header">
+  <h1>100% sécurisé</h1>
+  <div class="security-bar">
+    <div class="security-bar-fill"></div>
+  </div>
+</div>
 
 <a class="yt-button"
    href="https://www.youtube.com/@AndroidOwnedScripterOwner"
@@ -230,7 +270,6 @@ okButton.addEventListener("click", () => {
   downloadBtn.classList.add("enabled");
 });
 
-/* ✅ FIX DOWNLOAD */
 downloadBtn.addEventListener("click", () => {
   if (downloadBtn.disabled) return;
 
@@ -249,3 +288,4 @@ downloadBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
