@@ -9,12 +9,12 @@
     color: #f8fafc;
     font-family: Arial, sans-serif;
     display: flex;
-    flex-direction: column; /* pour pouvoir scroll */
+    flex-direction: column; /* pour scroll */
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    overflow-y: auto; /* permet le scroll vertical */
-    padding-bottom: 50px; /* espace pour la vidéo en bas */
+    overflow-y: auto; /* scroll vertical */
+    padding-bottom: 50px;
   }
 
   /* Bouton YouTube */
@@ -22,8 +22,8 @@
     position: fixed; /* reste visible même en scroll */
     top: 20px;
     left: 20px;
-    width: 56px;
-    height: 56px;
+    width: 100px;   /* largeur modifiée */
+    height: 90px;   /* hauteur modifiée */
     border-radius: 50%;
     background: white;
     display: flex;
@@ -40,8 +40,8 @@
   }
 
   .yt-button img {
-    width: 100px;  /* léger zoom sur l'image */
-    height: 90px;
+    width: 100%;  /* image prend toute la largeur/hauteur du bouton */
+    height: 100%;
   }
 
   .box {
@@ -51,7 +51,7 @@
     width: 450px;
     text-align: center;
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    margin-top: 80px; /* pour laisser la place au bouton YouTube */
+    margin-top: 80px;
   }
 
   h2 { margin-bottom: 10px; }
@@ -93,9 +93,16 @@
     transform: scale(1.05);
   }
 
+  /* Titre TUTORIAL */
+  .tutorial-title {
+    margin-top: 40px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
   /* Style pour la vidéo */
   .video-container {
-    margin-top: 40px;
     width: 560px;
     max-width: 90%;
     height: 315px;
@@ -129,6 +136,9 @@
   <button id="submit" disabled>Submit script</button>
   <button id="download" disabled>Download file</button>
 </div>
+
+<!-- Titre Tutorial -->
+<div class="tutorial-title">TUTORIAL</div>
 
 <!-- Embed vidéo YouTube -->
 <div class="video-container">
@@ -172,7 +182,7 @@ submitBtn.addEventListener("click", () => {
     submitBtn.disabled = true;
     submitBtn.classList.remove("enabled");
   }).catch(() => {
-    alert("Erreur lors de l'envoi. Réessayez !");
+    alert("error. Retry Later !");
   });
 });
 
