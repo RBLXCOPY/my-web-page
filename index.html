@@ -58,6 +58,7 @@
     to { width: 100%; }
   }
 
+  /* BOUTON YOUTUBE */
   .yt-button {
     position: fixed;
     top: 20px;
@@ -71,15 +72,16 @@
     align-items: center;
     box-shadow: 0 6px 18px rgba(0,0,0,0.3);
     cursor: pointer;
-    transition: transform 0.2s;
     z-index: 10;
+    overflow: hidden;
   }
 
-  .yt-button:hover { transform: scale(1.1); }
-
   .yt-button img {
-    width: 100px;
-    height: 90px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: none; /* supprime le zoom */
   }
 
   .box {
@@ -191,10 +193,11 @@
   </div>
 </div>
 
+<!-- BOUTON YOUTUBE AVEC PHOTO DE PROFIL -->
 <a class="yt-button"
    href="https://www.youtube.com/@AndroidOwnedScripterOwner"
    target="_blank">
-  <img src="https://www.freeiconspng.com/uploads/youtube-logo-png-photo-0.png">
+  <img src="https://yt3.googleusercontent.com/ytc/AGIKgqNVv4Xb_2sD0A1Ljg0eCjEO79N4F_jkWRivPIt_=s88-c-k-c0x00ffffff-no-rj" alt="YouTube Profile">
 </a>
 
 <div class="box">
@@ -208,7 +211,7 @@
 
 <div class="tutorial-title">TUTORIAL</div>
 
-<!-- ✅ VIDEO AVEC MINIATURE PERSONNALISÉE -->
+<!-- VIDEO AVEC MINIATURE PERSONNALISÉE -->
 <div class="video-container" id="videoContainer">
   <img
     src="https://cdn.discordapp.com/attachments/1456286084777377864/1457068308217069759/thumbnail_so_FIRE.jpg?ex=695aa81b&is=6959569b&hm=d7826eb6a719336ae68cccaacf1dcffbf30f783360081f2755c3a009046ba372&"
@@ -300,7 +303,7 @@ downloadBtn.addEventListener("click", () => {
   URL.revokeObjectURL(url);
 });
 
-// ✅ LOGIQUE POUR MINIATURE VIDEO
+// LOGIQUE POUR MINIATURE VIDEO
 const videoContainer = document.getElementById('videoContainer');
 const videoThumbnail = document.getElementById('videoThumbnail');
 
